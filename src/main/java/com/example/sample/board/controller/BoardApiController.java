@@ -1,0 +1,106 @@
+package com.example.sample.board.controller;
+
+import com.example.sample.board.data.Board;
+import com.example.sample.board.data.PagingVO;
+import com.example.sample.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequiredArgsConstructor
+public class BoardApiController {
+
+    private final BoardService service;
+
+    @GetMapping("/api/board/list")
+    public Map<String, Object> getList(@RequestParam(defaultValue = "0") int currentPage) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try{
+            PagingVO page = new PagingVO();
+
+            int totalCount = service.getListCount();
+
+            page.dataInit(currentPage, totalCount);
+            List<Board.Response> list = service.getList(page);
+            resultMap.put("data", list);
+            resultMap.put("currentPage", currentPage);
+            resultMap.put("total", totalCount);
+            resultMap.put("totalPage", page.getTotalPage());
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return resultMap;
+    }
+
+    @DeleteMapping("/api/board/boId")
+    public Map<String, Object> deleteBoard(@PathVariable(value="boId") Integer boardNo) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+
+         int resultCode = 0;
+         String resultMsg  ="OK";
+        try{
+            param.put("boardNo", boardNo);
+            resultCode = service.deleteBoard(param);
+
+            //실행을 했으나 delete 미실행일경우
+            if(resultCode < 1) {
+                resultCode = 0;
+                resultMsg = "Fail";
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            resultCode = -1;
+            resultMsg = e.getMessage();
+        }finally {
+            resultMap.put("resultCode", resultCode);
+            resultMap.put("resultMsg", resultMsg);
+        }
+
+        return resultMap;
+
+    }
+
+
+    @PutMapping("/api/board/{boId}")
+    public Map<String, Object> modifyBoard(@PathVariable(value="boId") Integer boId,
+                                           Board.Request updateRequest) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+
+        int resultCode = 0;
+        String resultMsg  ="OK";
+
+        try {
+            param.put("boId", boId);
+            resultCode = service.updateBoard(updateRequest);
+
+            //실행을 했으나 delete 미실행일경우
+            if(resultCode < 1) {
+                resultCode = 0;
+                resultMsg = "Fail";
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            resultCode = -1;
+            resultMsg = e.getMessage();
+
+        }finally {
+            resultMap.put("resultCode", resultCode);
+            resultMap.put("resultMsg", resultMsg);
+        }
+
+        return resultMap;
+
+    }
+
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sample.board.dao.BoardMapper">
+
+    <select id="getListCount"  parameterType="com.example.sample.board.data.PagingVO"  resultType="int">
+        select count(*)
+        from board
+
+    </select>
+
+    <select id="getBoardList"  resultType="com.example.sample.board.data.Board$Response">
+
+          select bo_id,
+                 title,
+                 contents,
+                 writer,
+                 ifnull(update_date, create_date) last_modified
+          from board
+          order by last_modified desc
+          LIMIT #{beginPage}, #{endPage}
+
+    </select>
+
+
+    <select id="getBoard"  resultType="com.example.sample.board.data.Board$Response" parameterType="java.util.Map">
+
+        select bo_id,
+               title,
+               contents,
+               writer,
+               ifnull(update_date, create_date) last_modified
+        from board
+        where bo_id = #{boId}
+
+    </select>
+
+    <insert  id="insertBoard" parameterType="com.example.sample.board.data.Board$Response">
+        insert into board(title, contents, writer)
+             values(#{title}, #{content}, #{writer})
+    </insert>
+
+    <update id="updateBoard" parameterType="com.example.sample.board.data.Board$Response">
+
+        update board
+        <set>
+            <if test="title neq null and title neq ''">
+                title = #{title},
+            </if>
+            <if test="content neq null and content neq ''">
+                content = #{content},
+            </if>
+            <if test="boarNo neq null">
+                update_date = now()
+            </if>
+        </set>
+        where bo_id = #{boId}
+
+    </update>
+
+    <delete id="deleteBoard" parameterType="java.util.Map">
+        delete from board where bo_id = #{boId}
+    </delete>
+</mapper>

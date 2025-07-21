@@ -1,0 +1,52 @@
+server:
+  port: 8080
+  site:
+    domain: localhost
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://222.239.249.197:3306/my_db
+    username: root
+    password: ehdduf922
+    hikari:
+      type: com.zaxxer.hikari.HikariDataSource
+      connection-timeout: 60000
+      maximum-pool-size: 50
+      minimum-idle: 20
+      idle-timeout: 10000
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+      prefix: classpath:/templates/
+    suffix: .html
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
+    restart:
+      enabled: true
+
+
+
+#마이바티스 설정
+mybatis:
+  mapper-locations: mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
