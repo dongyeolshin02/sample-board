@@ -4,6 +4,8 @@ import com.example.sample.board.data.Board;
 import com.example.sample.board.data.PagingVO;
 import com.example.sample.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -69,10 +71,22 @@ public class BoardApiController {
 
     }
 
+    @PostMapping("/api/board")
+    public Map<String, Object> addBoard(@RequestBody Board.Request board) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try{
+            service.register(board);
+        }catch (Exception e) {
+            resultMap.put("resultCode", 500);
+            e.printStackTrace();
+        }
 
-    @PutMapping("/api/board/{boId}")
-    public Map<String, Object> modifyBoard(@PathVariable(value="boId") Integer boId,
-                                           Board.Request updateRequest) {
+        return resultMap;
+    }
+
+
+    @PutMapping(value = "/api/board/{boId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> modifyBoard(@RequestBody Board.Request updateRequest) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
 
@@ -80,7 +94,6 @@ public class BoardApiController {
         String resultMsg  ="OK";
 
         try {
-            param.put("boId", boId);
             resultCode = service.updateBoard(updateRequest);
 
             //실행을 했으나 delete 미실행일경우
