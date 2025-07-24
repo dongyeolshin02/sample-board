@@ -46,7 +46,7 @@ public class BoardApiController {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
 
-         int resultCode = 0;
+         int resultCode = 200;
          String resultMsg  ="OK";
         try{
             param.put("boardNo", boardNo);
@@ -60,7 +60,7 @@ public class BoardApiController {
 
         }catch (Exception e) {
             e.printStackTrace();
-            resultCode = -1;
+            resultCode = 500;
             resultMsg = e.getMessage();
         }finally {
             resultMap.put("resultCode", resultCode);
@@ -75,7 +75,9 @@ public class BoardApiController {
     public Map<String, Object> addBoard(@RequestBody Board.Request board) {
         Map<String, Object> resultMap = new HashMap<>();
         try{
+
             service.register(board);
+            resultMap.put("resultCode", 200);
         }catch (Exception e) {
             resultMap.put("resultCode", 500);
             e.printStackTrace();
@@ -90,7 +92,7 @@ public class BoardApiController {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
 
-        int resultCode = 0;
+        int resultCode = 200;
         String resultMsg  ="OK";
 
         try {
@@ -104,7 +106,7 @@ public class BoardApiController {
 
         }catch (Exception e) {
             e.printStackTrace();
-            resultCode = -1;
+            resultCode = 500;
             resultMsg = e.getMessage();
 
         }finally {
