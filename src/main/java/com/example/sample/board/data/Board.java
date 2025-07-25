@@ -24,9 +24,10 @@ public class Board {
     @Builder
     public static class Request {
 
+        @Setter
         private int boId;
         private String title;
-        private String content;
+        private String contents;
         private String writer;
     }
 }

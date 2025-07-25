@@ -31,8 +31,8 @@ public class BoardService {
         return mapper.insertBoard(request);
     }
 
-    public Board.Response getBoard(Map<String, Object> param) throws  Exception {
-        return mapper.getBoard(param);
+    public Board.Response getBoard(int boId) throws  Exception {
+        return mapper.getBoard(boId);
     }
 
 

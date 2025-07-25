@@ -36,7 +36,7 @@
 
     <insert  id="insertBoard" parameterType="com.example.sample.board.data.Board$Response">
         insert into board(title, contents, writer)
-             values(#{title}, #{content}, #{writer})
+             values(#{title}, #{contents}, #{writer})
     </insert>
 
     <update id="updateBoard" parameterType="com.example.sample.board.data.Board$Response">
@@ -46,10 +46,10 @@
             <if test="title neq null and title neq ''">
                 title = #{title},
             </if>
-            <if test="content neq null and content neq ''">
-                content = #{content},
+            <if test="contents neq null and contents neq ''">
+                contents = #{contents},
             </if>
-            <if test="boarNo neq null">
+            <if test="boId neq null">
                 update_date = now()
             </if>
         </set>

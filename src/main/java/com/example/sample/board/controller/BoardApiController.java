@@ -41,6 +41,23 @@ public class BoardApiController {
         return resultMap;
     }
 
+
+    @GetMapping("/api/board/{boId}")
+    public Map<String, Object> getBoard(@PathVariable("boId") int boId) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try{
+            Board.Response list = service.getBoard(boId);
+            resultMap.put("data", list);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return resultMap;
+    }
+
+
     @DeleteMapping("/api/board/boId")
     public Map<String, Object> deleteBoard(@PathVariable(value="boId") Integer boardNo) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -88,7 +105,9 @@ public class BoardApiController {
 
 
     @PutMapping(value = "/api/board/{boId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> modifyBoard(@RequestBody Board.Request updateRequest) {
+    public Map<String, Object> modifyBoard(
+            @PathVariable(value="boId") int boId,
+            @RequestBody Board.Request updateRequest) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
 
@@ -96,6 +115,8 @@ public class BoardApiController {
         String resultMsg  ="OK";
 
         try {
+
+            updateRequest.setBoId(boId);
             resultCode = service.updateBoard(updateRequest);
 
             //실행을 했으나 delete 미실행일경우
